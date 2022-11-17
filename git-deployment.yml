@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skylight-backend-github
+  labels:
+    app: skylight-backend
+spec:
+  selector:
+    matchLabels:
+        app: skylight-backend
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: skylight-backend
+    spec:
+      containers:
+        - name: skylight-backend
+          image: 811294009861.dkr.ecr.ap-south-1.amazonaws.com/skylight@sha256:e907f88379942f1bd502b79272e641ceebf6c6122c340b2def11b562487fc711
+          ports:
+            - containerPort: 8100
+              protocol: TCP
+          imagePullPolicy: Always
