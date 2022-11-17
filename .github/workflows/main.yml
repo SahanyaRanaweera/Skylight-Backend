@@ -35,7 +35,6 @@ jobs:
 
     - name: deploy to cluster
       env:
-        KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
         kubectl config use-context arn:aws:eks:ap-south-1:811294009861:cluster/skylight-cluster
