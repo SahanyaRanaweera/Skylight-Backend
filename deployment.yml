@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: skylight-backend
+  
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: skylight-backend-github
+  name: skylight-backend
+  namespace: skylight-backend
   labels:
     app: skylight-backend
 spec:
