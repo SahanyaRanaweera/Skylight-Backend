@@ -1,7 +1,7 @@
 on: push
 name: deploy
 jobs:
-  build:
+  deploy:
     name: deploy to cluster
     runs-on: ubuntu-latest
     steps:
@@ -32,16 +32,13 @@ jobs:
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-  deploy:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
+
     - name: deploy to cluster
       env:
         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
         aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1 --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7
+        aws configure list
         kubectl create -f namespace.yml
         kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend
       
