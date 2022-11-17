@@ -36,7 +36,9 @@ jobs:
     - name: deploy to cluster
       env:
         KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-      run: kubectl apply -f deployment.yml -n ${{ secrets.CLUSTER_NAME }} --kubeconfig <(echo $KUBECONFIG | base64 --decode)
+      run: |
+        kubectl config use-context arn:aws:eks:ap-south-1:811294009861:cluster/skylight-cluster
+        kubectl apply -f deployment.yml -n ${{ secrets.CLUSTER_NAME }} --kubeconfig <(echo $KUBECONFIG | base64 --decode)
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
