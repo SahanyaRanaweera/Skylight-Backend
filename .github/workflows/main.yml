@@ -38,7 +38,7 @@ jobs:
         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
         aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1
-        kubectl apply -f deployment.yml -n $CLUSTER_NAME
+        kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
