@@ -37,7 +37,7 @@ jobs:
     - name: deploy to cluster
       env:
         KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-      run: kubectl apply -f deployment.yml -n ${{ secrets.CLUSTER_NAME }}
+      run: kubectl apply -f deployment.yml -n ${{ secrets.CLUSTER_NAME }} --kubeconfig <(echo $KUBECONFIG | base64 --decode)
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
