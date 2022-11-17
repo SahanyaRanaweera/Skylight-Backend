@@ -34,10 +34,8 @@ jobs:
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: deploy to cluster
-      env:
-        CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+
       run: |
-        kubectl config use-context arn:aws:eks:ap-south-1:811294009861:cluster/skylight-cluster
         kubectl apply -f deployment.yml -n $.CLUSTER_NAME
       
     - name: set image to deployment
