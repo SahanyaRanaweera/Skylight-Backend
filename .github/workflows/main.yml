@@ -38,10 +38,8 @@ jobs:
         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
         aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1 --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7
-        aws configure list
-        kubectl config view --raw > ~/.kube/config
-        kubectl create -f namespace.yml --kubeconfig=~/.kube/config
-        kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend --kubeconfig=~/.kube/config
+        kubectl create -f namespace.yml --kubeconfig=$HOME/.kube/config
+        kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend --kubeconfig=$HOME/.kube/config
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
