@@ -37,7 +37,7 @@ jobs:
       env:
         CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
-        aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1
+        aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1 --role-arn arn:aws:iam::811294009861:role/eks_cluster_role
         kubectl create -f namespace.yml
         kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend
       
