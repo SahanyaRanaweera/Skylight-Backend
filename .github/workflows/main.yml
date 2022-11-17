@@ -34,9 +34,11 @@ jobs:
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: deploy to cluster
-
+      env:
+        CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       run: |
-        kubectl apply -f deployment.yml -n $.CLUSTER_NAME
+        aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1
+        kubectl apply -f deployment.yml -n $CLUSTER_NAME
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
