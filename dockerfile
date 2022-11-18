@@ -1,19 +1,26 @@
-#  Dockerfile for Node Express Backend
-
-FROM node:14-slim
+FROM node:16-slim
 
 # Create App Directory
 WORKDIR /usr/src/app
 
-# Install Dependencies
-COPY ./package.json ./
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
 
-RUN npm install --silent
+COPY package*.json ./
+
+RUN npm install --force
+# If you are building your code for production
+# RUN npm install --only=production
 
 # Copy app source code
-COPY . .
+COPY --chown=node:node . .
 
-# Exports
-EXPOSE 8100
+# Container PORT
+EXPOSE 8080
 
+RUN chown -R node:node /usr/src/app
+
+USER node
+
+## Launch the wait tool and then your application
 CMD ["npm","start"]
