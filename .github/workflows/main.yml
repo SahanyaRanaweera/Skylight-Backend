@@ -39,6 +39,7 @@ jobs:
       run: |
         aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1 --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7
         aws sts get-caller-identity
+        aws sts assume-role --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7 --role-session-name test
         aws eks get-token --cluster-name skylight-cluster --region ap-south-1
         kubectl config current-context
         kubectl create -f namespace.yml --kubeconfig=$HOME/.kube/config
