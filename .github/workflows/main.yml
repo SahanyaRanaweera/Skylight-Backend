@@ -32,18 +32,6 @@ jobs:
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-    - name: deploy to cluster
-      env:
-        CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-      run: |
-        aws eks update-kubeconfig --name $CLUSTER_NAME --region ap-south-1 --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7
-        aws sts get-caller-identity
-        aws sts assume-role --role-arn arn:aws:iam::811294009861:role/eksctl-skylight-cluster-cluster-ServiceRole-L1QDVPVRBWL7 --role-session-name test
-        aws eks get-token --cluster-name skylight-cluster --region ap-south-1
-        kubectl config current-context
-        kubectl create -f namespace.yml --kubeconfig=$HOME/.kube/config
-        kubectl apply -f deployment.yml -n $CLUSTER_NAME --namespace=skylight-backend --kubeconfig=$HOME/.kube/config
       
     - name: set image to deployment
       uses: kodermax/kubectl-aws-eks@master
@@ -53,12 +41,11 @@ jobs:
         ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
         IMAGE_TAG: ${{ github.sha }}
       with:
-        args: set image deployment/skylight-backend-github skylight-backend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        args: set image deployment/skylight-backend skylight=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         
     - name: verify deployment
       uses: kodermax/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
-        args: rollout status deployment/skylight-backend-github
-
+        args: rollout status deployment/skylight-backend
